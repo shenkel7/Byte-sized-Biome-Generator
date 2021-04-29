@@ -8,16 +8,18 @@ public class TerrainGenerator : MonoBehaviour
 
     Vector3[] vertices;
     int[] triangles;
+    Color[] colors;
 
     public int width = 50;
     public int height = 50;
-    public float amplitude = .5f;
+    float amplitude;
 
     // Start is called before the first frame update
     void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        amplitude = GlobalVariables.amplitude;
 
         GenerateTerrain();
         UpdateMesh();
@@ -27,6 +29,8 @@ public class TerrainGenerator : MonoBehaviour
     {
         vertices = new Vector3[(width + 1) * (height + 1)];
         triangles = new int[width * height * 6];
+        colors = new Color[vertices.Length];
+
 
         int index = 0;
         for(int x = 0; x <= width; x++)
@@ -34,6 +38,7 @@ public class TerrainGenerator : MonoBehaviour
             for(int z = 0; z <= height; z++)
             {
                 float y = Mathf.PerlinNoise(x * .1f, z * .1f) * amplitude;
+                y += Mathf.PerlinNoise(x * .3f, z * .3f) * amplitude / 2;
                 vertices[index] = new Vector3(x, y, z);
                 index++;
             }
@@ -56,6 +61,12 @@ public class TerrainGenerator : MonoBehaviour
             }
             vertex++;
         }
+
+        // create new colors array where the colors will be created.
+
+        for (int i = 0; i < vertices.Length; i++)
+            colors[i] = Color.Lerp(Color.red, Color.green, vertices[i].y);
+
     }
 
     void UpdateMesh()
@@ -63,13 +74,16 @@ public class TerrainGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.colors = colors;
         mesh.RecalculateNormals();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        amplitude = GlobalVariables.amplitude;
+        GenerateTerrain();
+        UpdateMesh();
     }
 
 }
