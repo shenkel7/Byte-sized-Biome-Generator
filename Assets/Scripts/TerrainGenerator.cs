@@ -8,7 +8,6 @@ public class TerrainGenerator : MonoBehaviour
 
     Vector3[] vertices;
     int[] triangles;
-    Color[] colors;
 
     public int width = 50;
     public int height = 50;
@@ -29,7 +28,6 @@ public class TerrainGenerator : MonoBehaviour
     {
         vertices = new Vector3[(width + 1) * (height + 1)];
         triangles = new int[width * height * 6];
-        colors = new Color[vertices.Length];
 
 
         int index = 0;
@@ -38,7 +36,7 @@ public class TerrainGenerator : MonoBehaviour
             for(int z = 0; z <= height; z++)
             {
                 float y = Mathf.PerlinNoise(x * .1f, z * .1f) * amplitude;
-                y += Mathf.PerlinNoise(x * .3f, z * .3f) * amplitude / 2;
+                y += Mathf.PerlinNoise(x * .3f, z * .3f) * amplitude / 3;
                 vertices[index] = new Vector3(x, y, z);
                 index++;
             }
@@ -46,26 +44,21 @@ public class TerrainGenerator : MonoBehaviour
 
         int tri = 0;
         int vertex = 0;
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for(int y = 0; y < height; y++)
+            for(int x = 0; x < width; x++)
             {
                 triangles[tri] = vertex;
                 triangles[tri + 1] = vertex + 1;
                 triangles[tri + 2] = vertex + width + 1;
-                triangles[tri + 3] = vertex + 1;
-                triangles[tri + 4] = vertex + width + 1;
+                triangles[tri + 3] = vertex + width + 1;
+                triangles[tri + 4] = vertex + 1;
                 triangles[tri + 5] = vertex + width + 2;
                 vertex++;
                 tri += 6;
             }
             vertex++;
         }
-
-        // create new colors array where the colors will be created.
-
-        for (int i = 0; i < vertices.Length; i++)
-            colors[i] = Color.Lerp(Color.red, Color.green, vertices[i].y);
 
     }
 
@@ -74,16 +67,18 @@ public class TerrainGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-        mesh.colors = colors;
         mesh.RecalculateNormals();
     }
 
     // Update is called once per frame
     void Update()
     {
-        amplitude = GlobalVariables.amplitude;
-        GenerateTerrain();
-        UpdateMesh();
+        if(amplitude != GlobalVariables.amplitude)
+        {
+            amplitude = GlobalVariables.amplitude;
+            GenerateTerrain();
+            UpdateMesh();
+        }
     }
 
 }
