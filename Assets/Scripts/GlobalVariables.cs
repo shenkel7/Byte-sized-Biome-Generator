@@ -9,7 +9,7 @@ public class GlobalVariables : MonoBehaviour
     public static float precipitation;
     public static float temperature;
 
-    float MAX_AMPLITUDE = 30.0f;
+    float MAX_AMPLITUDE = 20.0f;
     float MAX_PRECIPITATION = 100.0f;
     float MAX_TEMP = 100.0f;
 

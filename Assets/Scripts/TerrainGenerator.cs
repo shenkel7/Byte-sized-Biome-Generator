@@ -8,6 +8,7 @@ public class TerrainGenerator : MonoBehaviour
 
     Vector3[] vertices;
     int[] triangles;
+    Vector2[] uvs;
 
     public int width = 50;
     public int height = 50;
@@ -28,6 +29,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         vertices = new Vector3[(width + 1) * (height + 1)];
         triangles = new int[width * height * 6];
+        uvs = new Vector2[vertices.Length];
 
 
         int index = 0;
@@ -60,6 +62,11 @@ public class TerrainGenerator : MonoBehaviour
             vertex++;
         }
 
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+
     }
 
     void UpdateMesh()
@@ -67,6 +74,7 @@ public class TerrainGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
     }
 
