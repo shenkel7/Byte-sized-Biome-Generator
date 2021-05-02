@@ -5,6 +5,7 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     Mesh mesh;
+    Material biomeMaterial;
 
     Vector3[] vertices;
     int[] triangles;
@@ -12,18 +13,56 @@ public class TerrainGenerator : MonoBehaviour
 
     public int width = 50;
     public int height = 50;
+    public Texture DesertTex;
+    public Texture RainforestTex;
+    public Texture TundraTex;
+    public Texture TaigaTex;
+    public Texture GrasslandTex;
+    public Texture ForestTex;
+    public Texture SavannaTex;
+    private Texture[] textures;
+
     float amplitude;
     float xSeed;
     float ySeed;
+    float precipitation;
+    float temperature;
+
+    private enum Biome: int { Rainforest, Savanna, Desert, Grassland, Forest, Taiga, Tundra };
+    private Vector2[] biomePoints = new Vector2[]
+    {
+        new Vector2( 1, 1 ), // Rainforest
+        new Vector2( 1, .393f ), // Savanna
+        new Vector2( 1, 0 ), // Desert
+        new Vector2( .633f, .5f ), // Grassland
+        new Vector2( .6f, .036f ), // Forest
+        new Vector2( .233f, .179f ), // Taiga
+        new Vector2( 0, 0 ), // Tundra
+    };
 
     // Start is called before the first frame update
     void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        biomeMaterial = GetComponent<MeshRenderer>().material;
+
+        // populating texture array
+        textures = new Texture[7];
+        textures[0] = RainforestTex;
+        textures[1] = SavannaTex;
+        textures[2] = DesertTex;
+        textures[3] = GrasslandTex;
+        textures[4] = ForestTex;
+        textures[5] = TaigaTex;
+        textures[6] = TundraTex;
+
+        // global variables
         amplitude = GlobalVariables.amplitude;
         xSeed = GlobalVariables.xSeed;
         ySeed = GlobalVariables.ySeed;
+        precipitation = GlobalVariables.precipitation;
+        temperature = GlobalVariables.temperature;
 
         GenerateTerrain();
         UpdateMesh();
@@ -73,6 +112,14 @@ public class TerrainGenerator : MonoBehaviour
 
     }
 
+    // find closest biomes, get texture and calculate color
+    void UpdateBiome()
+    {
+
+        biomeMaterial.SetTexture("_MainTex2", DesertTex);
+        biomeMaterial.SetColor("_Color2", new Color(1, 0, 0));
+    }
+
     void UpdateMesh()
     {
         mesh.Clear();
@@ -92,6 +139,12 @@ public class TerrainGenerator : MonoBehaviour
             ySeed = GlobalVariables.ySeed;
             GenerateTerrain();
             UpdateMesh();
+        }
+        if(precipitation != GlobalVariables.precipitation || temperature != GlobalVariables.temperature)
+        {
+            precipitation = GlobalVariables.precipitation;
+            temperature = GlobalVariables.temperature;
+            UpdateBiome();
         }
     }
 

@@ -12,8 +12,8 @@ public class GlobalVariables : MonoBehaviour
     public static float ySeed;
 
     float MAX_AMPLITUDE = 20.0f;
-    float MAX_PRECIPITATION = 100.0f;
-    float MAX_TEMP = 100.0f;
+    float MAX_PRECIPITATION = 320.0f;
+    float MAX_TEMP = 80.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +40,13 @@ public class GlobalVariables : MonoBehaviour
     // range [0, 1]
     public void setPrecipitation(float precip)
     {
-        precipitation = precip * MAX_PRECIPITATION;
+        precipitation = precip;
     }
 
     // range [0, 1]
     public void setTemperature(float temp)
     {
-        temperature = temp * MAX_TEMP;
+        temperature = temp;
     }
 
     public void setXSeed(string x)

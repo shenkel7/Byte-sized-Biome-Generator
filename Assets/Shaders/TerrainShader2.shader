@@ -8,7 +8,7 @@
         _Color2 ("Color", Color) = (1,1,1,1)
         _Color3 ("High Elevation Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
-        _MainTex2 ("Texture", 2D) = "white" {}
+        _MainTex2 ("Texture2", 2D) = "white" {}
         _MainTex3 ("High Elevation Texture", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
