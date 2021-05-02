@@ -13,6 +13,8 @@ public class TerrainGenerator : MonoBehaviour
     public int width = 50;
     public int height = 50;
     float amplitude;
+    float xSeed;
+    float ySeed;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,8 @@ public class TerrainGenerator : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         amplitude = GlobalVariables.amplitude;
+        xSeed = GlobalVariables.xSeed;
+        ySeed = GlobalVariables.ySeed;
 
         GenerateTerrain();
         UpdateMesh();
@@ -37,8 +41,8 @@ public class TerrainGenerator : MonoBehaviour
         {
             for(int z = 0; z <= height; z++)
             {
-                float y = Mathf.PerlinNoise(x * .1f, z * .1f) * amplitude;
-                y += Mathf.PerlinNoise(x * .3f, z * .3f) * amplitude / 3;
+                float y = Mathf.PerlinNoise(x * .1f + xSeed, z * .1f + ySeed) * amplitude;
+                y += Mathf.PerlinNoise(x * .3f + xSeed, z * .3f + ySeed) * amplitude / 3;
                 vertices[index] = new Vector3(x, y, z);
                 index++;
             }
@@ -81,9 +85,11 @@ public class TerrainGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(amplitude != GlobalVariables.amplitude)
+        if(amplitude != GlobalVariables.amplitude || xSeed != GlobalVariables.xSeed || ySeed != GlobalVariables.ySeed)
         {
             amplitude = GlobalVariables.amplitude;
+            xSeed = GlobalVariables.xSeed;
+            ySeed = GlobalVariables.ySeed;
             GenerateTerrain();
             UpdateMesh();
         }
