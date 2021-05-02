@@ -3,6 +3,7 @@
     Properties
     {
         _Height ("Height", Float) = 1.0
+        _K ("K Interpolation Factor", Float) = 1.0
         _Color ("Color", Color) = (1,1,1,1)
         _Color2 ("Color", Color) = (1,1,1,1)
         _Color3 ("High Elevation Color", Color) = (1,1,1,1)
@@ -43,6 +44,7 @@
         fixed4 _Color2;
         fixed4 _Color3;
         float _Height;
+        float _K;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -58,7 +60,11 @@
             float3 up =  { 0, 1.0f, 0 };
             float blend = clamp (dot (IN.worldNormal, up), 0.0f, 1.0f);
             fixed4 c = lerp (tex2D (_MainTex, IN.uv_MainTex) * _Color, tex2D (_MainTex2, IN.uv_MainTex2) * _Color2, blend);
-            c = lerp( c, tex2D (_MainTex3, IN.uv_MainTex3) * _Color3, clamp (IN.worldPos.y, 0, _Height) / _Height);
+
+            // sigmoid curve
+            float y = 1 / (1 + exp (-_K * (clamp (IN.worldPos.y, 0, _Height) / _Height - 0.6)));
+    
+            c = lerp( c, tex2D (_MainTex3, IN.uv_MainTex3) * _Color3, y);
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;
