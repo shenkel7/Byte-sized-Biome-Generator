@@ -597,7 +597,7 @@ MonoBehaviour:
   GrasslandTex: {fileID: 2800000, guid: 8301b3693dafc4bc8a8b0f1ba1e5a7b0, type: 3}
   ForestTex: {fileID: 2800000, guid: 0af711b91220b441e91ca25ea8275cc8, type: 3}
   SavannaTex: {fileID: 2800000, guid: 8301b3693dafc4bc8a8b0f1ba1e5a7b0, type: 3}
-  SnowTex: {fileID: 0}
+  SnowTex: {fileID: 2800000, guid: 09bc6250fa7df49e5b5e88b9aea887cc, type: 3}
   DesertCol: {r: 0.9245283, g: 0.7623444, b: 0.46662515, a: 0}
   RainforestCol: {r: 0, g: 0.8113208, b: 0.15666893, a: 0}
   TundraCol: {r: 0.5198469, g: 0.6226415, b: 0.6055091, a: 0}
@@ -605,7 +605,7 @@ MonoBehaviour:
   GrasslandCol: {r: 0.41960785, g: 0.7169812, b: 0.33445004, a: 0}
   ForestCol: {r: 0.2769224, g: 0.46226418, b: 0.2769224, a: 0}
   SavannaCol: {r: 0.6001535, g: 0.6132076, b: 0.2747864, a: 0}
-  SnowCol: {r: 0, g: 0, b: 0, a: 0}
+  SnowCol: {r: 0.48313457, g: 0.6962946, b: 0.7264151, a: 0}
 --- !u!23 &149581398
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -52,6 +52,7 @@ public class TerrainGenerator : MonoBehaviour
         new Vector2( .6f, .036f ), // Forest
         new Vector2( .233f, .179f ), // Taiga
         new Vector2( 0, 0 ), // Tundra
+        new Vector2( 0, 1 ) // Snow
     };
 
     // Start is called before the first frame update
@@ -146,45 +147,59 @@ public class TerrainGenerator : MonoBehaviour
         // color = lerp 3 closest color (bounds)
 
         Vector2 point = new Vector2(temperature, precipitation);
-
         
         float minDist = Vector2.Distance(biomePoints[0], point);
         float minDist2 = Vector2.Distance(biomePoints[1], point);
+        float minDist3 = 100; // will definitely change 
         int minIndex = 0;
         int minIndex2 = 1;
+        int minIndex3 = 100; // will definitely change
 
-        if(minDist > minDist2)
+        if (minDist > minDist2)
         {
             float temp = minDist;
             minDist = minDist2;
             minDist2 = temp;
-
             minIndex = 1;
             minIndex2 = 0;
         }
 
+
         for(int i = 1; i < biomePoints.Length; i++)
         {
             float tempDist = Vector2.Distance(biomePoints[i], point);
-            if(tempDist < minDist2)
+            if(tempDist <= minDist3)
             {
-                if(tempDist < minDist)
+                if(tempDist <= minDist2)
                 {
-                    minDist2 = minDist;
-                    minDist = tempDist;
-                    minIndex2 = minIndex;
-                    minIndex = i;
+                    if(tempDist <= minDist)
+                    {
+                        minDist3 = minDist2;
+                        minDist2 = minDist;
+                        minDist = tempDist;
+                        minIndex3 = minIndex2;
+                        minIndex2 = minIndex;
+                        minIndex = i;
+                    } else
+                    {
+                        minDist3 = minDist2;
+                        minDist2 = tempDist;
+                        minIndex3 = minIndex2;
+                        minIndex2 = i;
+                    }
                 } else
                 {
-                    minDist2 = tempDist;
-                    minIndex2 = i;
+                    minDist3 = tempDist;
+                    minIndex3 = i;
                 }
             }
         }
 
 
         biomeMaterial.SetTexture("_MainTex2", textures[minIndex]);
-        biomeMaterial.SetColor("_Color2", Color.Lerp(colors[minIndex], colors[minIndex2], minDist / (minDist + minDist2)));
+        Color c = Color.Lerp(colors[minIndex2], colors[minIndex3], minDist3 / (minDist2 + minDist3));
+        c = Color.Lerp(colors[minIndex], c, minDist);
+        biomeMaterial.SetColor("_Color2", c);
     }
 
     void UpdateMesh()
