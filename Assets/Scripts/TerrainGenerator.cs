@@ -13,6 +13,8 @@ public class TerrainGenerator : MonoBehaviour
 
     public int width = 50;
     public int height = 50;
+
+    // biome textures
     public Texture DesertTex;
     public Texture RainforestTex;
     public Texture TundraTex;
@@ -20,7 +22,20 @@ public class TerrainGenerator : MonoBehaviour
     public Texture GrasslandTex;
     public Texture ForestTex;
     public Texture SavannaTex;
+    public Texture SnowTex;
+
+    // biome colors
+    public Color DesertCol;
+    public Color RainforestCol;
+    public Color TundraCol;
+    public Color TaigaCol;
+    public Color GrasslandCol;
+    public Color ForestCol;
+    public Color SavannaCol;
+    public Color SnowCol;
+
     private Texture[] textures;
+    private Color[] colors;
 
     float amplitude;
     float xSeed;
@@ -28,7 +43,6 @@ public class TerrainGenerator : MonoBehaviour
     float precipitation;
     float temperature;
 
-    private enum Biome: int { Rainforest, Savanna, Desert, Grassland, Forest, Taiga, Tundra };
     private Vector2[] biomePoints = new Vector2[]
     {
         new Vector2( 1, 1 ), // Rainforest
@@ -48,7 +62,7 @@ public class TerrainGenerator : MonoBehaviour
         biomeMaterial = GetComponent<MeshRenderer>().material;
 
         // populating texture array
-        textures = new Texture[7];
+        textures = new Texture[8];
         textures[0] = RainforestTex;
         textures[1] = SavannaTex;
         textures[2] = DesertTex;
@@ -56,6 +70,18 @@ public class TerrainGenerator : MonoBehaviour
         textures[4] = ForestTex;
         textures[5] = TaigaTex;
         textures[6] = TundraTex;
+        textures[7] = SnowTex;
+
+        // populating color array
+        colors = new Color[8];
+        colors[0] = RainforestCol;
+        colors[1] = SavannaCol;
+        colors[2] = DesertCol;
+        colors[3] = GrasslandCol;
+        colors[4] = ForestCol;
+        colors[5] = TaigaCol;
+        colors[6] = TundraCol;
+        colors[7] = SnowCol;
 
         // global variables
         amplitude = GlobalVariables.amplitude;
@@ -115,9 +141,50 @@ public class TerrainGenerator : MonoBehaviour
     // find closest biomes, get texture and calculate color
     void UpdateBiome()
     {
+        // for each point, calculate distance
+        // texture = biome closest distance
+        // color = lerp 3 closest color (bounds)
 
-        biomeMaterial.SetTexture("_MainTex2", DesertTex);
-        biomeMaterial.SetColor("_Color2", new Color(1, 0, 0));
+        Vector2 point = new Vector2(temperature, precipitation);
+
+        
+        float minDist = Vector2.Distance(biomePoints[0], point);
+        float minDist2 = Vector2.Distance(biomePoints[1], point);
+        int minIndex = 0;
+        int minIndex2 = 1;
+
+        if(minDist > minDist2)
+        {
+            float temp = minDist;
+            minDist = minDist2;
+            minDist2 = temp;
+
+            minIndex = 1;
+            minIndex2 = 0;
+        }
+
+        for(int i = 1; i < biomePoints.Length; i++)
+        {
+            float tempDist = Vector2.Distance(biomePoints[i], point);
+            if(tempDist < minDist2)
+            {
+                if(tempDist < minDist)
+                {
+                    minDist2 = minDist;
+                    minDist = tempDist;
+                    minIndex2 = minIndex;
+                    minIndex = i;
+                } else
+                {
+                    minDist2 = tempDist;
+                    minIndex2 = i;
+                }
+            }
+        }
+
+
+        biomeMaterial.SetTexture("_MainTex2", textures[minIndex]);
+        biomeMaterial.SetColor("_Color2", Color.Lerp(colors[minIndex], colors[minIndex2], minDist / (minDist + minDist2)));
     }
 
     void UpdateMesh()
