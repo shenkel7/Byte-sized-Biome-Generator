@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
+    [SerializeField] public GameObject MonoTree; 
+    [SerializeField] public int MaxTrees; 
+    
+
     Mesh mesh;
     Material biomeMaterial;
 
@@ -42,6 +46,9 @@ public class TerrainGenerator : MonoBehaviour
     float ySeed;
     float precipitation;
     float temperature;
+
+    // trees
+    List<GameObject> trees;
 
     private Vector2[] biomePoints = new Vector2[]
     {
@@ -91,6 +98,7 @@ public class TerrainGenerator : MonoBehaviour
         precipitation = GlobalVariables.precipitation;
         temperature = GlobalVariables.temperature;
 
+        trees = new List<GameObject>();
         GenerateTerrain();
         UpdateMesh();
     }
@@ -101,8 +109,17 @@ public class TerrainGenerator : MonoBehaviour
         triangles = new int[width * height * 6];
         uvs = new Vector2[vertices.Length];
 
+        // destroy old trees
+        for(int i = 0; i < trees.Count; i++){
+            trees[i].GetComponent<Monotree>().destroyBranches();
+            Destroy(trees[i]);            
+        }
 
+        trees = new List<GameObject>();
+
+        int numTrees = 0;
         int index = 0;
+        int space = 0;
         for(int x = 0; x <= width; x++)
         {
             for(int z = 0; z <= height; z++)
@@ -110,7 +127,17 @@ public class TerrainGenerator : MonoBehaviour
                 float y = Mathf.PerlinNoise(x * .1f + xSeed, z * .1f + ySeed) * amplitude;
                 y += Mathf.PerlinNoise(x * .3f + xSeed, z * .3f + ySeed) * amplitude / 3;
                 vertices[index] = new Vector3(x, y, z);
-                index++;
+                ++index;
+                Vector3 treePosition = new Vector3(x,y,z) + transform.position;
+                if(numTrees < MaxTrees && space > 235) {
+                    Debug.Log("created tree at pos " + x + " " + y + " " + z);
+                    GameObject tree = Instantiate(MonoTree, treePosition, transform.rotation);
+                    trees.Add(tree);
+                    // tree.GetComponent<MonoTree>().initialize(treePosition);
+                    ++numTrees;
+                    space = 0;
+                }
+                space++;
             }
         }
 
