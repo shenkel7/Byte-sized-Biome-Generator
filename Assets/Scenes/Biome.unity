@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43749005, g: 0.4853111, b: 0.56558573, a: 1}
+  m_IndirectSpecularColor: {r: 0.43749, g: 0.4853111, b: 0.565586, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -588,14 +588,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d050c4bd7bf49f1b28f6404f3da821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MonoTree: {fileID: 494588666263720069, guid: f3a52e51595764361a53cb293fb4cf86, type: 3}
+  MaxTrees: 5000
+  GlobalVariables: {fileID: 1033531841}
   width: 100
   height: 100
-  DesertTex: {fileID: 2800000, guid: d4d2fec4ebaa0461bb8964622922fc82, type: 3}
-  RainforestTex: {fileID: 2800000, guid: 0af711b91220b441e91ca25ea8275cc8, type: 3}
-  TundraTex: {fileID: 2800000, guid: 0af711b91220b441e91ca25ea8275cc8, type: 3}
-  TaigaTex: {fileID: 2800000, guid: 0af711b91220b441e91ca25ea8275cc8, type: 3}
+  DesertTex: {fileID: 2800000, guid: 09bc6250fa7df49e5b5e88b9aea887cc, type: 3}
+  RainforestTex: {fileID: 2800000, guid: 7c853f3977c93418e95386284b5bcf61, type: 3}
+  TundraTex: {fileID: 2800000, guid: 7c853f3977c93418e95386284b5bcf61, type: 3}
+  TaigaTex: {fileID: 2800000, guid: 7c853f3977c93418e95386284b5bcf61, type: 3}
   GrasslandTex: {fileID: 2800000, guid: 8301b3693dafc4bc8a8b0f1ba1e5a7b0, type: 3}
-  ForestTex: {fileID: 2800000, guid: 0af711b91220b441e91ca25ea8275cc8, type: 3}
+  ForestTex: {fileID: 2800000, guid: 7c853f3977c93418e95386284b5bcf61, type: 3}
   SavannaTex: {fileID: 2800000, guid: 8301b3693dafc4bc8a8b0f1ba1e5a7b0, type: 3}
   SnowTex: {fileID: 2800000, guid: 09bc6250fa7df49e5b5e88b9aea887cc, type: 3}
   DesertCol: {r: 0.9245283, g: 0.7623444, b: 0.46662515, a: 0}
@@ -1558,6 +1561,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1033531842}
   - component: {fileID: 1033531841}
+  - component: {fileID: 1033531843}
   m_Layer: 0
   m_Name: GlobalVariableManager
   m_TagString: Untagged
@@ -1577,6 +1581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5eb16b8c793e4599b7addd77908e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  biomeIndex: 6
 --- !u!4 &1033531842
 Transform:
   m_ObjectHideFlags: 0
@@ -1591,6 +1596,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1033531843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033531840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17006f66dbd0a400d8a210660fc067c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1047680171
 GameObject:
   m_ObjectHideFlags: 0

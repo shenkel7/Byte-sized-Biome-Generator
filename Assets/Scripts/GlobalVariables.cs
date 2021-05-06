@@ -10,10 +10,12 @@ public class GlobalVariables : MonoBehaviour
     public static float temperature;
     public static float xSeed;
     public static float ySeed;
+    public int biomeIndex = 6; // Tundra default
 
     float MAX_AMPLITUDE = 20.0f;
     float MAX_PRECIPITATION = 320.0f;
     float MAX_TEMP = 80.0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,11 @@ public class GlobalVariables : MonoBehaviour
     public void setTemperature(float temp)
     {
         temperature = temp;
+    }
+
+    public void setBiomeIndex(int i)
+    {
+        biomeIndex = i;
     }
 
     public void setXSeed(string x)

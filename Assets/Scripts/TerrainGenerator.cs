@@ -6,6 +6,8 @@ public class TerrainGenerator : MonoBehaviour
 {
     [SerializeField] public GameObject MonoTree; 
     [SerializeField] public int MaxTrees; 
+
+    [SerializeField] public GlobalVariables GlobalVariables;
     
 
     Mesh mesh;
@@ -50,6 +52,21 @@ public class TerrainGenerator : MonoBehaviour
     // trees
     List<GameObject> trees;
 
+    // biome tree parameters
+    int biomeIndex;
+
+    // minimum perlin noise threshold to spawn tree
+    private float[] spawnFactor = new float[]{
+        0.1f,   // Rainforest
+        0.8f,   // Savanna
+        0.95f,  // Desert
+        0.8f,   // Grassland
+        0.1f,   // Forest
+        0.6f,   // Taiga
+        0.2f,   // Tundra
+        0.5f    // Snow
+    };
+
     private Vector2[] biomePoints = new Vector2[]
     {
         new Vector2( 1, 1 ), // Rainforest
@@ -68,6 +85,7 @@ public class TerrainGenerator : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         biomeMaterial = GetComponent<MeshRenderer>().material;
+        biomeIndex = GlobalVariables.biomeIndex; // Tundra default
 
         // populating texture array
         textures = new Texture[8];
@@ -109,35 +127,15 @@ public class TerrainGenerator : MonoBehaviour
         triangles = new int[width * height * 6];
         uvs = new Vector2[vertices.Length];
 
-        // destroy old trees
-        for(int i = 0; i < trees.Count; i++){
-            trees[i].GetComponent<Monotree>().destroyBranches();
-            Destroy(trees[i]);            
-        }
-
-        trees = new List<GameObject>();
-
-        int numTrees = 0;
         int index = 0;
-        int space = 0;
         for(int x = 0; x <= width; x++)
         {
             for(int z = 0; z <= height; z++)
             {
                 float y = Mathf.PerlinNoise(x * .1f + xSeed, z * .1f + ySeed) * amplitude;
-                y += Mathf.PerlinNoise(x * .3f + xSeed, z * .3f + ySeed) * amplitude / 3;
+                y += Mathf.PerlinNoise(x * .2f + xSeed, z * .2f + ySeed) * amplitude / 3;
                 vertices[index] = new Vector3(x, y, z);
                 ++index;
-                Vector3 treePosition = new Vector3(x,y,z) + transform.position;
-                if(numTrees < MaxTrees && space > 235) {
-                    Debug.Log("created tree at pos " + x + " " + y + " " + z);
-                    GameObject tree = Instantiate(MonoTree, treePosition, transform.rotation);
-                    trees.Add(tree);
-                    // tree.GetComponent<MonoTree>().initialize(treePosition);
-                    ++numTrees;
-                    space = 0;
-                }
-                space++;
             }
         }
 
@@ -222,11 +220,46 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
 
-
+        GlobalVariables.setBiomeIndex(minIndex);
+        biomeIndex = minIndex;
         biomeMaterial.SetTexture("_MainTex2", textures[minIndex]);
         Color c = Color.Lerp(colors[minIndex2], colors[minIndex3], minDist3 / (minDist2 + minDist3));
         c = Color.Lerp(colors[minIndex], c, minDist);
         biomeMaterial.SetColor("_Color2", c);
+    }
+
+    void UpdateTrees(){
+        // destroy old trees
+        for(int i = 0; i < trees.Count; i++){
+            trees[i].GetComponent<Monotree>().destroyBranches();
+            Destroy(trees[i]);            
+        }
+
+        trees = new List<GameObject>();
+
+        for(int x = 0; x <= width; x += 1)
+        {
+            for(int z = 0; z <= height; z += Random.Range(3,8))
+            {
+                
+                float treeFactor = Mathf.PerlinNoise(x * .1f + xSeed + 20, z * .1f + ySeed + 20);
+                float y = Mathf.PerlinNoise(x * .1f + xSeed, z * .1f + ySeed) * amplitude;
+                y += Mathf.PerlinNoise(x * .2f + xSeed, z * .2f + ySeed) * amplitude / 3;
+                // float rand = Random.Range(0f, 1f);
+                
+                if(treeFactor > spawnFactor[biomeIndex] && spawnFactor[biomeIndex] > Random.Range(0f, 1f)){
+                    Vector3 treePosition = new Vector3(x,y,z) + transform.position;
+                        // Debug.Log("tree factor: " + treeFactor + " rand: " + rand);
+                        Debug.Log("created tree at pos " + x + " " + y + " " + z);
+                        // Monotree.Initialize(biomeIndex);
+                        GameObject tree = Instantiate(MonoTree, treePosition, transform.rotation);
+                        tree.GetComponent<Monotree>().Initialize(biomeIndex);
+                        trees.Add(tree);
+                }
+
+                
+            }
+        }
     }
 
     void UpdateMesh()
@@ -248,12 +281,14 @@ public class TerrainGenerator : MonoBehaviour
             ySeed = GlobalVariables.ySeed;
             GenerateTerrain();
             UpdateMesh();
+            UpdateTrees();
         }
         if(precipitation != GlobalVariables.precipitation || temperature != GlobalVariables.temperature)
         {
             precipitation = GlobalVariables.precipitation;
             temperature = GlobalVariables.temperature;
             UpdateBiome();
+            UpdateTrees();
         }
     }
 
