@@ -1,10 +1,21 @@
 # Byte-sized-Biome-Generator
 
-A small generator for different types of biomes based on precipitation and temperature!
+Created by Kelly Shen and Joshua Brown.
 
-# Examples
+A small generator for different types of biomes based on precipitation and temperature! Built in Unity with C# and Shaderlab.
 
-![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/screenshots/desert.png?raw=true)
+### Examples
+
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/desert.png)
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/grassland.png)
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/rainforest.png)
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/savanna.png)
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/taiga.png)
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/blob/master/screenshots/tundra.png)
+
+
+
+### Links
 
 Watch the process here:
 [Byte-Sized Biome Generator](https://youtu.be/CcnSbqBupCQ)
