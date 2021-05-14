@@ -245,7 +245,6 @@ public class TerrainGenerator : MonoBehaviour
                 float treeFactor = Mathf.PerlinNoise(x * .1f + xSeed + 20, z * .1f + ySeed + 20);
                 float y = Mathf.PerlinNoise(x * .1f + xSeed, z * .1f + ySeed) * amplitude;
                 y += Mathf.PerlinNoise(x * .2f + xSeed, z * .2f + ySeed) * amplitude / 3;
-                // float rand = Random.Range(0f, 1f);
                 
                 if(treeFactor > spawnFactor[biomeIndex] && spawnFactor[biomeIndex] > Random.Range(0f, 1f)){
                     Vector3 treePosition = new Vector3(x,y,z) + transform.position;

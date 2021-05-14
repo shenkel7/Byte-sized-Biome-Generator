@@ -1,6 +1,12 @@
 # Byte-sized-Biome-Generator
 
-Watch the how-to here:
+A small generator for different types of biomes based on precipitation and temperature!
+
+# Examples
+
+![alt text](https://github.com/shenkel7/Byte-sized-Biome-Generator/screenshots/desert.png?raw=true)
+
+Watch the process here:
 [Byte-Sized Biome Generator](https://youtu.be/CcnSbqBupCQ)
 
 Our Report:
@@ -8,3 +14,4 @@ Our Report:
 
 Additional Codebase for L-systems:
 [Byte-Sized Biome Generator](https://github.com/jgbrown-ut/LSystems)
+
