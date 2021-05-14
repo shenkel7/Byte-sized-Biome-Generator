@@ -5,3 +5,6 @@ Watch the how-to here:
 
 Our Report:
 [Project Write-up](https://docs.google.com/document/d/1zWSVxp_rrXDx1QbhUgivSTXhlslLQok6TIa0KBJmyDQ/edit?usp=sharing)
+
+Additional Codebase for L-systems:
+[Byte-Sized Biome Generator](https://github.com/jgbrown-ut/LSystems)
